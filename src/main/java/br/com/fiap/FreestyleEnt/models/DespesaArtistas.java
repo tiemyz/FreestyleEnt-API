@@ -3,7 +3,7 @@ package br.com.fiap.FreestyleEnt.models;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class DespesaArtista {
+public class DespesaArtistas {
 	
     private Long id; 
     private BigDecimal valor; 
@@ -13,7 +13,7 @@ public class DespesaArtista {
     private LocalDate dataCadastro; 
     private LocalDate dataApresentacao;
 
-	public DespesaArtista(Long id, BigDecimal valor, String artista, String gravadora, String detalhes, LocalDate dataCadastro, LocalDate dataApresentacao) {
+	public DespesaArtistas(Long id, BigDecimal valor, String artista, String gravadora, String detalhes, LocalDate dataCadastro, LocalDate dataApresentacao) {
 		this.id = id;
 		this.valor = valor;
 		this.artista = artista;
@@ -23,7 +23,10 @@ public class DespesaArtista {
 		this.dataApresentacao = dataApresentacao;
 	}
 
-	public Long getId() {
+	public DespesaArtistas(long l, BigDecimal bigDecimal, LocalDate now, String string) {
+    }
+
+    public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
@@ -68,7 +71,7 @@ public class DespesaArtista {
 	
 	@Override
 	public String toString() {
-		return "DespesaArtista [id=" + id + ", valor=" + valor + ", artista=" + artista + ", gravadora=" + gravadora
+		return "DespesaArtistas [id=" + id + ", valor=" + valor + ", artista=" + artista + ", gravadora=" + gravadora
 				+ ", detalhes=" + detalhes + ", dataCadastro=" + dataCadastro + ", dataApresentacao=" + dataApresentacao
 				+ "]";
 	} 
