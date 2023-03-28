@@ -13,6 +13,6 @@ public class DespesaInfraestruturaController {
 
     @GetMapping("/api/v1/despesa_infraestrutura")
     public DespesaInfraestrutura index(){
-        return new DespesaInfraestrutura(1l, new BigDecimal(100), LocalDate.now(), "palco primavera");
+        return new DespesaInfraestrutura(1l, null, null, new BigDecimal(100), LocalDate.now(), "palco primavera");
     } 
 }

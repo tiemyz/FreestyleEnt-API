@@ -14,6 +14,7 @@ public class DespesaArtistas {
     private LocalDate dataApresentacao;
 
 	public DespesaArtistas(Long id, BigDecimal valor, String artista, String gravadora, String detalhes, LocalDate dataCadastro, LocalDate dataApresentacao) {
+		
 		this.id = id;
 		this.valor = valor;
 		this.artista = artista;
