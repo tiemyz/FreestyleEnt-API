@@ -3,8 +3,15 @@ package br.com.fiap.FreestyleEnt.models;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class DespesaFuncionario {
 	
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nomeEquipe;
 	private String nomeLider;
@@ -12,6 +19,8 @@ public class DespesaFuncionario {
 	private LocalDate dataCadastroFuncionario;
 	private LocalDate diaServico;
 	private String detalhesFuncionario;
+
+	protected DespesaFuncionario(){}
 	
 	public DespesaFuncionario(Long id, String nomeEquipe, String nomeLider, BigDecimal valorFuncionario,
 		LocalDate dataCadastroFuncionario, LocalDate diaServico, String detalhesFuncionario) {
