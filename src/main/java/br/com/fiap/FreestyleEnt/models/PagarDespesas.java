@@ -3,12 +3,21 @@ package br.com.fiap.FreestyleEnt.models;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class PagarDespesas {
 	
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private BigDecimal valorDespesas;
 	private LocalDate dataPagamento;
 	private String detalhesDespesas;
+
+	protected PagarDespesas(){}
 	
 	public PagarDespesas(Long id, BigDecimal valorDespesas, LocalDate dataPagamento, String detalhesDespesas) {
 		
