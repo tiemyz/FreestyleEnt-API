@@ -7,16 +7,34 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class DespesaArtistas {
+
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; 
+
+	@NotNull @Min(value = 0, message = "Deve ser positivo")
     private BigDecimal valor; 
+
+	@NotBlank @Size(min = 5, max = 50, message = "Nome completo, sem abreviações")
     private String artista;
+
+	@NotBlank @Size(min = 5, max = 50, message = "Nome completo, sem abreviações")
     private String gravadora;
+
+	@NotBlank @Size(min = 5, max = 300, message = "Deve ser uma descrição significativa")
     private String detalhes;
+
+	@NotNull @PastOrPresent
     private LocalDate dataCadastro; 
+
+	@NotNull @PastOrPresent
     private LocalDate dataApresentacao;
 
 	protected DespesaArtistas(){}
