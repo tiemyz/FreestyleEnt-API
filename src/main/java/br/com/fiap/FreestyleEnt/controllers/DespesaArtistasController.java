@@ -1,13 +1,8 @@
 package br.com.fiap.FreestyleEnt.controllers;
 
-//import java.math.BigDecimal;
-//import java.time.LocalDate;
-//import java.util.ArrayList;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-//import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.FreestyleEnt.exception.RestNotFoundException;
 import br.com.fiap.FreestyleEnt.models.DespesaArtistas;
+import br.com.fiap.FreestyleEnt.repository.ContaCadastroRepository;
 import br.com.fiap.FreestyleEnt.repository.DespesaArtistasRepository;
 import jakarta.validation.Valid;
 
@@ -33,11 +29,14 @@ public class DespesaArtistasController {
     Logger log = LoggerFactory.getLogger(DespesaArtistasController.class);
 
     @Autowired
-    DespesaArtistasRepository repository; 
+    DespesaArtistasRepository despesaArtRepository; 
+
+    @Autowired
+    ContaCadastroRepository contaCadastroRepository;
 
     @GetMapping
     public List<DespesaArtistas> index(){
-        return repository.findAll();
+        return despesaArtRepository.findAll();
     }
 
     @PostMapping
@@ -46,7 +45,8 @@ public class DespesaArtistasController {
             BindingResult result
         ){
         log.info("Cadastrando despesa...." + despesaArtistas);
-        repository.save(despesaArtistas);
+        despesaArtRepository.save(despesaArtistas);
+        despesaArtistas.setContaCadastro(contaCadastroRepository.findById(despesaArtistas.getContaCadastro().getId()).get());
         return ResponseEntity.status(HttpStatus.CREATED).body(despesaArtistas);
     }
 
@@ -59,7 +59,7 @@ public class DespesaArtistasController {
     @DeleteMapping("{id}")
     public ResponseEntity<DespesaArtistas> destroy(@PathVariable Long id){
         log.info("Apagando despesa...." + id);
-        repository.delete(getDespesaArtistas(id));
+        despesaArtRepository.delete(getDespesaArtistas(id));
         return ResponseEntity.noContent().build();
     }
 
@@ -71,12 +71,12 @@ public class DespesaArtistasController {
         log.info("Atualizando despesa...." + id);
         getDespesaArtistas(id);
         despesaArtistas.setId(id);
-        repository.save(despesaArtistas);
+        despesaArtRepository.save(despesaArtistas);
         return ResponseEntity.ok(despesaArtistas);
     }
 
     private DespesaArtistas getDespesaArtistas(Long id) {
-        return repository.findById(id).orElseThrow(
+        return despesaArtRepository.findById(id).orElseThrow(
             () -> new RestNotFoundException("Despesa não encontrada."));
     }
 }

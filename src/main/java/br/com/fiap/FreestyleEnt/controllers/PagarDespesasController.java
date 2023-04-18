@@ -1,13 +1,8 @@
 package br.com.fiap.FreestyleEnt.controllers;
 
-//import java.math.BigDecimal;
-//import java.time.LocalDate;
-//import java.util.ArrayList;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-//import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.FreestyleEnt.exception.RestNotFoundException;
 import br.com.fiap.FreestyleEnt.models.PagarDespesas;
+import br.com.fiap.FreestyleEnt.repository.ContaCadastroRepository;
 import br.com.fiap.FreestyleEnt.repository.PagarDespesasRepository;
 import jakarta.validation.Valid;
 
@@ -33,11 +29,14 @@ public class PagarDespesasController {
     Logger log = LoggerFactory.getLogger(PagarDespesasController.class);
 
     @Autowired
-    PagarDespesasRepository repository;
+    PagarDespesasRepository despesaPagarRepository;
+
+    @Autowired
+    ContaCadastroRepository contaCadastroRepository;
 
     @GetMapping
     public List<PagarDespesas> index(){
-        return repository.findAll();
+        return despesaPagarRepository.findAll();
     }
 
     @PostMapping
@@ -46,7 +45,8 @@ public class PagarDespesasController {
             BindingResult result
         ){
         log.info("Cadastrando despesa...." + despesaPagar);
-        repository.save(despesaPagar);
+        despesaPagarRepository.save(despesaPagar);
+        despesaPagar.setContaCadastro(contaCadastroRepository.findById(despesaPagar.getContaCadastro().getId()).get());
         return ResponseEntity.status(HttpStatus.CREATED).body(despesaPagar);
     }
 
@@ -59,7 +59,7 @@ public class PagarDespesasController {
     @DeleteMapping("{id}")
     public ResponseEntity<PagarDespesas> destroy(@PathVariable Long id){
         log.info("Apagando despesa...." + id);
-        repository.delete(getPagarDespesas(id));
+        despesaPagarRepository.delete(getPagarDespesas(id));
         return ResponseEntity.noContent().build();
     }
 
@@ -71,12 +71,12 @@ public class PagarDespesasController {
         log.info("Atualizando despesa...." + id);
         getPagarDespesas(id);
         despesaPagar.setId(id);
-        repository.save(despesaPagar);
+        despesaPagarRepository.save(despesaPagar);
         return ResponseEntity.ok(despesaPagar);
     }
 
     private PagarDespesas getPagarDespesas(Long id) {
-        return repository.findById(id).orElseThrow(
+        return despesaPagarRepository.findById(id).orElseThrow(
             () -> new RestNotFoundException("Despesa não encontrada."));
     }
 }
