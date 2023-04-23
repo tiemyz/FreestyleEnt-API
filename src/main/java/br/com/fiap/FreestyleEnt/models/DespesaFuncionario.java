@@ -14,6 +14,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +22,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class DespesaFuncionario {
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,12 +40,9 @@ public class DespesaFuncionario {
 	@NotNull @PastOrPresent
 	private LocalDate dataCadastroFuncionario;
 
-	@NotNull @PastOrPresent
-	private LocalDate diaServico;
-
 	@NotBlank @Size(min = 5, max = 300, message = "Deve ser uma descrição significativa")
 	private String detalhesFuncionario;
 
 	@ManyToOne
-	private ContaCadastro contaCadastro;
+	private Conta conta;
 }

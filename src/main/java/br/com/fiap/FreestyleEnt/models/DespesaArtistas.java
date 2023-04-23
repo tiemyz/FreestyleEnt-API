@@ -14,6 +14,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +22,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class DespesaArtistas {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,9 +43,6 @@ public class DespesaArtistas {
 	@NotNull @PastOrPresent
     private LocalDate dataCadastro; 
 
-	@NotNull @PastOrPresent
-    private LocalDate dataApresentacao;
-
 	@ManyToOne
-	private ContaCadastro contaCadastro;
+	private Conta conta;
 }

@@ -14,6 +14,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +22,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class PagarDespesas {
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,5 +38,5 @@ public class PagarDespesas {
 	private String detalhesDespesas;
 
 	@ManyToOne
-	private ContaCadastro contaCadastro;
+	private Conta conta;
 }

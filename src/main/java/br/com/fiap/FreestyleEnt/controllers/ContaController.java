@@ -15,27 +15,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.FreestyleEnt.exception.RestNotFoundException;
-import br.com.fiap.FreestyleEnt.models.ContaCadastro;
-import br.com.fiap.FreestyleEnt.repository.ContaCadastroRepository;
+import br.com.fiap.FreestyleEnt.models.Conta;
+import br.com.fiap.FreestyleEnt.repository.ContaRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/v1/conta_cadastro")
 @Slf4j
-public class ContaCadastroController {
+public class ContaController {
     
     @Autowired
-    ContaCadastroRepository repository;
-
+    ContaRepository repository;
+    
     @GetMapping
-    public List<ContaCadastro> index(){
+    public List<Conta> index(){
         return repository.findAll();
     }
 
     @PostMapping
-    public ResponseEntity<ContaCadastro> create(
-            @RequestBody @Valid ContaCadastro contaCadastro,
+    public ResponseEntity<Conta> create(
+            @RequestBody @Valid Conta contaCadastro,
             BindingResult result        
         ){
         log.info("Cadastrando conta...." + contaCadastro);
@@ -44,22 +44,22 @@ public class ContaCadastroController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ContaCadastro> show(@PathVariable Long id){
+    public ResponseEntity<Conta> show(@PathVariable Long id){
         log.info("Buscando conta...." + id);
         return ResponseEntity.ok(getContaCadastro(id));
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<ContaCadastro> destroy(@PathVariable Long id){
+    public ResponseEntity<Conta> destroy(@PathVariable Long id){
         log.info("Apagando conta...." + id);
         repository.delete(getContaCadastro(id));
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<ContaCadastro> update(
+    public ResponseEntity<Conta> update(
         @PathVariable Long id,
-        @RequestBody @Valid ContaCadastro contaCadastro
+        @RequestBody @Valid Conta contaCadastro
     ){
         log.info("Atualizando conta...." + id);
         getContaCadastro(id);
@@ -68,7 +68,7 @@ public class ContaCadastroController {
         return ResponseEntity.ok(contaCadastro);
     }
 
-    private ContaCadastro getContaCadastro(Long id) {
+    private Conta getContaCadastro(Long id) {
         return repository.findById(id).orElseThrow(
             () -> new RestNotFoundException("Conta não encontrada."));
     }
