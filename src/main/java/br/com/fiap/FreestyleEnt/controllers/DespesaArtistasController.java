@@ -39,7 +39,7 @@ public class DespesaArtistasController {
     public Page<DespesaArtistas> index(@RequestParam(required = false) String busca, @PageableDefault(size = 5) Pageable pageable){
         if (busca == null)
             return despesaArtRepository.findAll(pageable);
-        return despesaArtRepository.findByDescricaoContaining(busca, pageable);
+        return despesaArtRepository.findByIdContaining(busca, pageable);
     }
 
     @PostMapping

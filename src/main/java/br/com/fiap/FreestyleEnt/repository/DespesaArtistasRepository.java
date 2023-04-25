@@ -10,5 +10,5 @@ import br.com.fiap.FreestyleEnt.models.DespesaArtistas;
 
 public interface DespesaArtistasRepository extends JpaRepository<DespesaArtistas, Long> {
 
-    Page<DespesaArtistas> findByDescricaoContaining(String busca, Pageable pageable);
+    Page<DespesaArtistas> findByIdContaining(String busca, Pageable pageable);
 }

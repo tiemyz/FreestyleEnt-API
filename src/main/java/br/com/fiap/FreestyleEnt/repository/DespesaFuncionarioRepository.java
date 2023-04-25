@@ -8,5 +8,5 @@ import br.com.fiap.FreestyleEnt.models.DespesaFuncionario;
 
 
 public interface DespesaFuncionarioRepository extends JpaRepository<DespesaFuncionario, Long> {
-    Page<DespesaFuncionario> findByDescricaoContaining(String busca, Pageable pageable);
+    Page<DespesaFuncionario> findByIdContaining(String busca, Pageable pageable);
 }
