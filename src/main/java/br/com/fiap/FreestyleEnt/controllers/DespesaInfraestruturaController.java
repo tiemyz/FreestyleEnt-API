@@ -39,7 +39,7 @@ public class DespesaInfraestruturaController {
     public Page<DespesaInfraestrutura> index(@RequestParam(required = false) String busca, @PageableDefault(size = 5) Pageable pageable){
         if (busca == null)
             return despesaInfraRepository.findAll(pageable);
-        return despesaInfraRepository.findByIdContaining(busca, pageable);
+        return despesaInfraRepository.findByEmpresaContaining(busca, pageable);
     }
 
     @PostMapping

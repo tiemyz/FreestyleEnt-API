@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import br.com.fiap.FreestyleEnt.models.DespesaInfraestrutura;
 
 public interface DespesaInfraestruturaRepository extends JpaRepository<DespesaInfraestrutura, Long>{
-    Page<DespesaInfraestrutura> findByIdContaining(String busca, Pageable pageable);
+    Page<DespesaInfraestrutura> findByEmpresaContaining(String busca, Pageable pageable);
 }

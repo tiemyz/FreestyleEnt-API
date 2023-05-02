@@ -44,7 +44,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         despesaArtRepository.saveAll(List.of(
             DespesaArtistas.builder().valorArt(new BigDecimal(174123)).artista("New Order").gravadora("Factory Records").dataCadastroArt(LocalDate.now()).detalhesArt("new wave").conta(c1).build(),
 
-            DespesaArtistas.builder().valorArt(new BigDecimal(184133)).artista("ENHYPEN").gravadora("Belift Entertainment").dataCadastroArt(LocalDate.now()).detalhesArt(" ").conta(c1).build()
+            DespesaArtistas.builder().valorArt(new BigDecimal(184133)).artista("ENHYPEN").gravadora("Belift Entertainment").dataCadastroArt(LocalDate.now()).detalhesArt("não especificaram os detalhes").conta(c1).build()
         ));
 
         despesaFuncRepository.saveAll(List.of(

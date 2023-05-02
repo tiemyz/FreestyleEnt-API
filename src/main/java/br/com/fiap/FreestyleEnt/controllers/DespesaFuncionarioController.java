@@ -39,7 +39,7 @@ public class DespesaFuncionarioController {
     public Page<DespesaFuncionario> index(@RequestParam(required = false) String busca, @PageableDefault(size = 5) Pageable pageable){
         if (busca == null)
             return despesaFuncRepository.findAll(pageable);
-        return despesaFuncRepository.findByIdContaining(busca, pageable);
+        return despesaFuncRepository.findByNomeEquipeContaining(busca, pageable);
     }
 
     @PostMapping
