@@ -29,13 +29,13 @@ public class PagarDespesas {
 	private Long id;
 
 	@NotNull @Min(value = 0, message = "Deve ser positivo")
-	private BigDecimal valorDespesas;
+	private BigDecimal valorDesp;
 
 	@NotNull @PastOrPresent
 	private LocalDate dataPagamento;
 
 	@NotBlank @Size(min = 5, max = 300, message = "Deve ser uma descrição significativa")
-	private String detalhesDespesas;
+	private String detalhesDesp;
 
 	@ManyToOne
 	private Conta conta;

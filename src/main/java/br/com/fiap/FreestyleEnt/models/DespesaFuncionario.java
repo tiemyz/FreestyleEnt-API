@@ -35,13 +35,13 @@ public class DespesaFuncionario {
 	private String nomeLider;
 
 	@NotNull @Min(value = 0, message = "Deve ser positivo")
-	private BigDecimal valorFuncionario;
+	private BigDecimal valorFunc;
 
 	@NotNull @PastOrPresent
-	private LocalDate dataCadastroFuncionario;
+	private LocalDate dataCadastroFunc;
 
 	@NotBlank @Size(min = 5, max = 300, message = "Deve ser uma descrição significativa")
-	private String detalhesFuncionario;
+	private String detalhesFunc;
 
 	@ManyToOne
 	private Conta conta;

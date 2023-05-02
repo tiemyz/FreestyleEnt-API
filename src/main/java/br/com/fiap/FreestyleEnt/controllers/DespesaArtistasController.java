@@ -25,7 +25,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/api/v1/despesa_artistas")
+@RequestMapping("/api/v1/despesa_art")
 @Slf4j
 public class DespesaArtistasController {
 
@@ -39,7 +39,7 @@ public class DespesaArtistasController {
     public Page<DespesaArtistas> index(@RequestParam(required = false) String busca, @PageableDefault(size = 5) Pageable pageable){
         if (busca == null)
             return despesaArtRepository.findAll(pageable);
-        return despesaArtRepository.findByIdContaining(busca, pageable);
+        return despesaArtRepository.findByArtistaContaining(busca, pageable); //revisar
     }
 
     @PostMapping

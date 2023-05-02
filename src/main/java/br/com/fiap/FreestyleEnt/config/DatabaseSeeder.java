@@ -42,15 +42,15 @@ public class DatabaseSeeder implements CommandLineRunner {
         contaRepository.saveAll(List.of(c1, c2));
 
         despesaArtRepository.saveAll(List.of(
-            DespesaArtistas.builder().valor(new BigDecimal(174123)).artista("New Order").gravadora("Factory Records").dataCadastro(LocalDate.now()).detalhes("new wave").conta(c1).build(),
+            DespesaArtistas.builder().valorArt(new BigDecimal(174123)).artista("New Order").gravadora("Factory Records").dataCadastroArt(LocalDate.now()).detalhesArt("new wave").conta(c1).build(),
 
-            DespesaArtistas.builder().valor(new BigDecimal(184133)).artista("ENHYPEN").gravadora("Belift Entertainment").dataCadastro(LocalDate.now()).detalhes(" ").conta(c1).build()
+            DespesaArtistas.builder().valorArt(new BigDecimal(184133)).artista("ENHYPEN").gravadora("Belift Entertainment").dataCadastroArt(LocalDate.now()).detalhesArt(" ").conta(c1).build()
         ));
 
         despesaFuncRepository.saveAll(List.of(
-            DespesaFuncionario.builder().valorFuncionario(new BigDecimal(523)).nomeEquipe("Limpeza").nomeLider("Antônio Park").dataCadastroFuncionario(LocalDate.now()).detalhesFuncionario("produtos de limpeza").conta(c2).build(),
-
-            DespesaFuncionario.builder().valorFuncionario(new BigDecimal(782)).nomeEquipe("Atendimento").nomeLider("Karina Souza").dataCadastroFuncionario(LocalDate.now()).detalhesFuncionario("computadores").conta(c2).build()
+            DespesaFuncionario.builder().valorFunc(new BigDecimal(523)).nomeEquipe("Limpeza").nomeLider("Antônio Park").dataCadastroFunc(LocalDate.now()).detalhesFunc("produtos de limpeza").conta(c2).build(),
+            DespesaFuncionario.builder().valorFunc(new BigDecimal(782)).nomeEquipe("Atendimento").nomeLider("Karina Souza").dataCadastroFunc(LocalDate.now()).detalhesFunc("computadores").conta(c2).build()
         ));
+        
     } 
 }

@@ -9,6 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import br.com.fiap.FreestyleEnt.models.DespesaArtistas;
 
 public interface DespesaArtistasRepository extends JpaRepository<DespesaArtistas, Long> {
-
-    Page<DespesaArtistas> findByIdContaining(String busca, Pageable pageable);
+    Page<DespesaArtistas> findByArtistaContaining(String busca, Pageable pageable);
 }

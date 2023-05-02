@@ -25,7 +25,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/api/v1/despesa_funcionario")
+@RequestMapping("/api/v1/despesa_func")
 @Slf4j
 public class DespesaFuncionarioController {
 

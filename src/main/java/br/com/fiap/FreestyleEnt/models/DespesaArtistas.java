@@ -29,7 +29,7 @@ public class DespesaArtistas {
     private Long id; 
 
 	@NotNull @Min(value = 0, message = "Deve ser positivo")
-    private BigDecimal valor; 
+    private BigDecimal valorArt; 
 
 	@NotBlank @Size(min = 5, max = 50, message = "Nome completo, sem abreviações")
     private String artista;
@@ -38,10 +38,10 @@ public class DespesaArtistas {
     private String gravadora;
 
 	@NotBlank @Size(min = 5, max = 300, message = "Deve ser uma descrição significativa")
-    private String detalhes;
+    private String detalhesArt;
 
 	@NotNull @PastOrPresent
-    private LocalDate dataCadastro; 
+    private LocalDate dataCadastroArt; 
 
 	@ManyToOne
 	private Conta conta;
