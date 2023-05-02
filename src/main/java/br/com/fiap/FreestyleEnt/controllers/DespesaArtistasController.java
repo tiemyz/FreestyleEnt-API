@@ -1,10 +1,13 @@
 package br.com.fiap.FreestyleEnt.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+//import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
+//import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,28 +38,34 @@ public class DespesaArtistasController {
     @Autowired
     ContaRepository contaRepository;
 
+    @Autowired
+    PagedResourcesAssembler<Object> assembler;
+
     @GetMapping
-    public Page<DespesaArtistas> index(@RequestParam(required = false) String busca, @PageableDefault(size = 5) Pageable pageable){
-        if (busca == null)
-            return despesaArtRepository.findAll(pageable);
-        return despesaArtRepository.findByArtistaContaining(busca, pageable); //revisar
+    public PagedModel<EntityModel<Object>> index(@RequestParam(required = false) String busca, @PageableDefault(size = 5) Pageable pageable){
+        var despesaArtistas = (busca == null) ? 
+            despesaArtRepository.findAll(pageable): 
+            despesaArtRepository.findByArtistaContaining(busca, pageable);
+
+        return assembler.toModel(despesaArtistas.map(DespesaArtistas::toEntityModel)); 
     }
 
     @PostMapping
-    public ResponseEntity<DespesaArtistas> create(
+    public ResponseEntity<EntityModel<DespesaArtistas>> create(
             @RequestBody @Valid DespesaArtistas despesaArtistas,
-            BindingResult result
-        ){
+            BindingResult result) {
         log.info("Cadastrando despesa...." + despesaArtistas);
         despesaArtRepository.save(despesaArtistas);
         despesaArtistas.setConta(contaRepository.findById(despesaArtistas.getConta().getId()).get());
-        return ResponseEntity.status(HttpStatus.CREATED).body(despesaArtistas);
+        return ResponseEntity
+            .created(despesaArtistas.toEntityModel().getRequiredLink("self").toUri())
+            .body(despesaArtistas.toEntityModel());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<DespesaArtistas> show(@PathVariable Long id){
+    public EntityModel<DespesaArtistas> show(@PathVariable Long id){
         log.info("Buscando despesa...." + id);
-        return ResponseEntity.ok(getDespesaArtistas(id));
+        return getDespesaArtistas(id).toEntityModel();
     }
 
     @DeleteMapping("{id}")
@@ -67,15 +76,14 @@ public class DespesaArtistasController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<DespesaArtistas> update(
-        @PathVariable Long id,
-        @RequestBody @Valid DespesaArtistas despesaArtistas
-    ){
+    public ResponseEntity<EntityModel<DespesaArtistas>> update(
+            @PathVariable Long id,
+            @RequestBody @Valid DespesaArtistas despesaArtistas) {
         log.info("Atualizando despesa...." + id);
         getDespesaArtistas(id);
         despesaArtistas.setId(id);
         despesaArtRepository.save(despesaArtistas);
-        return ResponseEntity.ok(despesaArtistas);
+        return ResponseEntity.ok(despesaArtistas.toEntityModel());
     }
 
     private DespesaArtistas getDespesaArtistas(Long id) {

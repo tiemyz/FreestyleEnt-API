@@ -3,6 +3,11 @@ package br.com.fiap.FreestyleEnt.models;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
+
+import br.com.fiap.FreestyleEnt.controllers.ContaController;
+import br.com.fiap.FreestyleEnt.controllers.DespesaArtistasController;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,6 +22,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @Entity
 @Data
@@ -45,4 +51,14 @@ public class DespesaArtistas {
 
 	@ManyToOne
 	private Conta conta;
+
+	public EntityModel<DespesaArtistas> toEntityModel() {
+        return EntityModel.of(
+            this, 
+            linkTo(methodOn(DespesaArtistasController.class).show(id)).withSelfRel(),
+            linkTo(methodOn(DespesaArtistasController.class).destroy(id)).withRel("delete"),
+            linkTo(methodOn(DespesaArtistasController.class).index(null, Pageable.unpaged())).withRel("all"),
+            linkTo(methodOn(ContaController.class).show(this.getConta().getId())).withRel("conta")
+        );
+    }
 }

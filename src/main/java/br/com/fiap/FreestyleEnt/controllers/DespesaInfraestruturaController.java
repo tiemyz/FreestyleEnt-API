@@ -1,10 +1,13 @@
 package br.com.fiap.FreestyleEnt.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+//import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
+//import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,22 +38,28 @@ public class DespesaInfraestruturaController {
     @Autowired
     ContaRepository contaRepository;
 
+    @Autowired
+    PagedResourcesAssembler<Object> assembler;
+
     @GetMapping
-    public Page<DespesaInfraestrutura> index(@RequestParam(required = false) String busca, @PageableDefault(size = 5) Pageable pageable){
-        if (busca == null)
-            return despesaInfraRepository.findAll(pageable);
-        return despesaInfraRepository.findByEmpresaContaining(busca, pageable);
+    public PagedModel<EntityModel<Object>> index(@RequestParam(required = false) String busca, @PageableDefault(size = 5) Pageable pageable){
+        var despesaInfraestrutura = (busca == null) ? 
+            despesaInfraRepository.findAll(pageable): 
+            despesaInfraRepository.findByEmpresaContaining(busca, pageable);
+
+        return assembler.toModel(despesaInfraestrutura.map(DespesaInfraestrutura::toEntityModel)); 
     }
 
     @PostMapping
-    public ResponseEntity<DespesaInfraestrutura> create(
+    public ResponseEntity<EntityModel<DespesaInfraestrutura>> create(
             @RequestBody @Valid DespesaInfraestrutura despesaInfraestrutura,
-            BindingResult result
-        ){
+            BindingResult result) {
         log.info("Cadastrando despesa...." + despesaInfraestrutura);
         despesaInfraRepository.save(despesaInfraestrutura);
         despesaInfraestrutura.setConta(contaRepository.findById(despesaInfraestrutura.getConta().getId()).get());
-        return ResponseEntity.status(HttpStatus.CREATED).body(despesaInfraestrutura);
+        return ResponseEntity
+            .created(despesaInfraestrutura.toEntityModel().getRequiredLink("self").toUri())
+            .body(despesaInfraestrutura.toEntityModel());
     }
 
     @GetMapping("{id}")
@@ -67,15 +76,14 @@ public class DespesaInfraestruturaController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<DespesaInfraestrutura> update(
-        @PathVariable Long id, 
-        @RequestBody @Valid DespesaInfraestrutura despesaInfraestrutura
-    ){
+    public ResponseEntity<EntityModel<DespesaInfraestrutura>> update(
+            @PathVariable Long id, 
+            @RequestBody @Valid DespesaInfraestrutura despesaInfraestrutura) {
         log.info("Atualizando despesa...." + id);
         getDespesaInfraestrutura(id);
         despesaInfraestrutura.setId(id);
         despesaInfraRepository.save(despesaInfraestrutura);
-        return ResponseEntity.ok(despesaInfraestrutura);
+        return ResponseEntity.ok(despesaInfraestrutura.toEntityModel());
     }
 
     private DespesaInfraestrutura getDespesaInfraestrutura(Long id) {

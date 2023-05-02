@@ -1,10 +1,13 @@
 package br.com.fiap.FreestyleEnt.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+//import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
+//import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,28 +38,34 @@ public class PagarDespesasController {
     @Autowired
     ContaRepository contaRepository;
 
+    @Autowired
+    PagedResourcesAssembler<Object> assembler;
+
     @GetMapping
-    public Page<PagarDespesas> index(@RequestParam(required = false) String busca, @PageableDefault(size = 5) Pageable pageable){
-        if (busca == null)
-            return despesaPagarRepository.findAll(pageable);
-        return despesaPagarRepository.findByIdContaining(busca, pageable);
+    public PagedModel<EntityModel<Object>> index(@RequestParam(required = false) String busca, @PageableDefault(size = 5) Pageable pageable){
+        var despesaPagar = (busca == null) ? 
+            despesaPagarRepository.findAll(pageable): 
+            despesaPagarRepository.findByDetalhesDespContaining(busca, pageable);
+
+        return assembler.toModel(despesaPagar.map(PagarDespesas::toEntityModel));
     }
 
     @PostMapping
-    public ResponseEntity<PagarDespesas> create(
+    public ResponseEntity<EntityModel<PagarDespesas>> create(
             @RequestBody @Valid PagarDespesas despesaPagar,
-            BindingResult result
-        ){
+            BindingResult result) {
         log.info("Cadastrando despesa...." + despesaPagar);
         despesaPagarRepository.save(despesaPagar);
         despesaPagar.setConta(contaRepository.findById(despesaPagar.getConta().getId()).get());
-        return ResponseEntity.status(HttpStatus.CREATED).body(despesaPagar);
+        return ResponseEntity
+            .created(despesaPagar.toEntityModel().getRequiredLink("self").toUri())
+            .body(despesaPagar.toEntityModel());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<PagarDespesas> show(@PathVariable Long id){
+    public EntityModel<PagarDespesas> show(@PathVariable Long id){
         log.info("Buscando despesa...." + id);
-        return ResponseEntity.ok(getPagarDespesas(id));
+        return getPagarDespesas(id).toEntityModel();
     }
 
     @DeleteMapping("{id}")
@@ -67,15 +76,14 @@ public class PagarDespesasController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<PagarDespesas> update(
-        @PathVariable Long id, 
-        @RequestBody @Valid PagarDespesas despesaPagar
-    ){
+    public ResponseEntity<EntityModel<PagarDespesas>> update(
+            @PathVariable Long id, 
+            @RequestBody @Valid PagarDespesas despesaPagar) {
         log.info("Atualizando despesa...." + id);
         getPagarDespesas(id);
         despesaPagar.setId(id);
         despesaPagarRepository.save(despesaPagar);
-        return ResponseEntity.ok(despesaPagar);
+        return ResponseEntity.ok(despesaPagar.toEntityModel());
     }
 
     private PagarDespesas getPagarDespesas(Long id) {
