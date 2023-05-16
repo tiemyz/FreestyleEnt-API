@@ -8,10 +8,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import br.com.fiap.FreestyleEnt.models.Credencial;
 import br.com.fiap.FreestyleEnt.models.Usuario;
 import br.com.fiap.FreestyleEnt.repository.UsuarioRepository;
+import br.com.fiap.FreestyleEnt.service.TokenService;
 import jakarta.validation.Valid;
 
 @RestController
@@ -26,6 +26,9 @@ public class UsuarioController {
     @Autowired
     PasswordEncoder encoder;
 
+    @Autowired
+    TokenService tokenService;
+
     @PostMapping("/api/registrar")
     public ResponseEntity<Usuario> registrar(@RequestBody @Valid Usuario usuario){
         usuario.setSenha(encoder.encode(usuario.getSenha()));
@@ -36,7 +39,8 @@ public class UsuarioController {
     @PostMapping("/api/login")
     public ResponseEntity<Object> login(@RequestBody Credencial credencial){
         manager.authenticate(credencial.toAuthentication());
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken(credencial);
+        return ResponseEntity.ok(token);
     }
     
 }
