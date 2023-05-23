@@ -16,13 +16,10 @@ import jakarta.validation.Valid;
 
 @RestController
 public class UsuarioController {
-
     @Autowired
     UsuarioRepository repository;
-
     @Autowired
     AuthenticationManager manager;
-
     @Autowired
     PasswordEncoder encoder;
 
@@ -35,12 +32,11 @@ public class UsuarioController {
         repository.save(usuario);
         return ResponseEntity.ok(usuario);
     }
-
     @PostMapping("/api/login")
     public ResponseEntity<Object> login(@RequestBody Credencial credencial){
         manager.authenticate(credencial.toAuthentication());
         var token = tokenService.generateToken(credencial);
         return ResponseEntity.ok(token);
     }
-    
+
 }

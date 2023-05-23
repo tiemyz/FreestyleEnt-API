@@ -9,4 +9,5 @@ import br.com.fiap.FreestyleEnt.models.Usuario;
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     Optional<Usuario> findByEmail(String email);
+
 }

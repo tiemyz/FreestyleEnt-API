@@ -1,13 +1,12 @@
 package br.com.fiap.FreestyleEnt.controllers;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
-//import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,17 +18,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import br.com.fiap.FreestyleEnt.exception.RestNotFoundException;
 import br.com.fiap.FreestyleEnt.models.DespesaArtistas;
 import br.com.fiap.FreestyleEnt.repository.ContaRepository;
 import br.com.fiap.FreestyleEnt.repository.DespesaArtistasRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/v1/despesa_art")
 @Slf4j
+@SecurityRequirement(name = "bearer-key")
+@Tag(name = "despesa artistas")
 public class DespesaArtistasController {
 
     @Autowired
@@ -42,7 +47,7 @@ public class DespesaArtistasController {
     PagedResourcesAssembler<Object> assembler;
 
     @GetMapping
-    public PagedModel<EntityModel<Object>> index(@RequestParam(required = false) String busca, @PageableDefault(size = 5) Pageable pageable){
+    public PagedModel<EntityModel<Object>> index(@RequestParam(required = false) String busca, @ParameterObject @PageableDefault(size = 5) Pageable pageable){
         var despesaArtistas = (busca == null) ? 
             despesaArtRepository.findAll(pageable): 
             despesaArtRepository.findByArtistaContaining(busca, pageable);
@@ -51,6 +56,10 @@ public class DespesaArtistasController {
     }
 
     @PostMapping
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "a despesa foi cadastrada com sucesso"),
+        @ApiResponse(responseCode = "400", description = "os dados enviados são inválidos")
+    })
     public ResponseEntity<EntityModel<DespesaArtistas>> create(
             @RequestBody @Valid DespesaArtistas despesaArtistas,
             BindingResult result) {
@@ -63,6 +72,10 @@ public class DespesaArtistasController {
     }
 
     @GetMapping("{id}")
+    @Operation(
+        summary = "Detalhes da despesa",
+        description = "Retornar os dados da despesa de acordo com o id informado no path"
+    )
     public EntityModel<DespesaArtistas> show(@PathVariable Long id){
         log.info("Buscando despesa...." + id);
         return getDespesaArtistas(id).toEntityModel();
