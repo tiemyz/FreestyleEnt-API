@@ -14,7 +14,6 @@ import br.com.fiap.FreestyleEnt.repository.ContaRepository;
 import br.com.fiap.FreestyleEnt.repository.DespesaArtistasRepository;
 import br.com.fiap.FreestyleEnt.repository.DespesaFuncionarioRepository;
 import br.com.fiap.FreestyleEnt.repository.DespesaInfraestruturaRepository;
-import br.com.fiap.FreestyleEnt.repository.PagarDespesasRepository;
 
 @Configuration
 public class DatabaseSeeder implements CommandLineRunner {
@@ -30,9 +29,6 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     @Autowired
     DespesaInfraestruturaRepository despesaInfraRepository;
-
-    @Autowired
-    PagarDespesasRepository despesaPagarRepository;
 
     @Override
     public void run(String... args) throws Exception {
