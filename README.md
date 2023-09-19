@@ -1,6 +1,4 @@
 # FreestyleEnt
-
-# FreestyleEnt
 ## Endpoints
 
 - [Cadastro de despesa com artistas](#cadastro-de-despesa-com-artistas)
