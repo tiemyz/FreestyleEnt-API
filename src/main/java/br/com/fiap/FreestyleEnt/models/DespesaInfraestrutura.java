@@ -31,7 +31,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "T_DP_INFRA")
 public class DespesaInfraestrutura {
 	
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

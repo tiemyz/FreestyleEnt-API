@@ -21,55 +21,56 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/api/v1/conta_cadastro")
+@RequestMapping("/api/v1/conta")
 @Slf4j
 public class ContaController {
     
     @Autowired
-    ContaRepository repository;
-    
+    ContaRepository repository; 
+
     @GetMapping
     public List<Conta> index(){
+        log.info("buscando todas as contas");
         return repository.findAll();
     }
 
     @PostMapping
     public ResponseEntity<Conta> create(
-            @RequestBody @Valid Conta contaCadastro,
-            BindingResult result        
+            @RequestBody @Valid Conta conta, 
+            BindingResult result
         ){
-        log.info("Cadastrando conta...." + contaCadastro);
-        repository.save(contaCadastro);
-        return ResponseEntity.status(HttpStatus.CREATED).body(contaCadastro);
+        log.info("cadastrando conta: " + conta);
+        repository.save(conta);
+        return ResponseEntity.status(HttpStatus.CREATED).body(conta);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<Conta> show(@PathVariable Long id){
-        log.info("Buscando conta...." + id);
-        return ResponseEntity.ok(getContaCadastro(id));
+        log.info("buscando conta: " + id);
+        return ResponseEntity.ok(getConta(id));
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Conta> destroy(@PathVariable Long id){
-        log.info("Apagando conta...." + id);
-        repository.delete(getContaCadastro(id));
+        log.info("apagando conta: " + id);
+        repository.delete(getConta(id));
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("{id}")
     public ResponseEntity<Conta> update(
-        @PathVariable Long id,
-        @RequestBody @Valid Conta contaCadastro
+        @PathVariable Long id, 
+        @RequestBody @Valid Conta conta
     ){
-        log.info("Atualizando conta...." + id);
-        getContaCadastro(id);
-        contaCadastro.setId(id);
-        repository.save(contaCadastro);
-        return ResponseEntity.ok(contaCadastro);
+        log.info("atualizando conta: " + id);
+        getConta(id);
+        conta.setId(id);
+        repository.save(conta);
+        return ResponseEntity.ok(conta);
     }
 
-    private Conta getContaCadastro(Long id) {
+    private Conta getConta(Long id) {
         return repository.findById(id).orElseThrow(
-            () -> new RestNotFoundException("Conta não encontrada."));
+            () -> new RestNotFoundException("conta não encontrada"));
     }
 }

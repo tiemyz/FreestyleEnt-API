@@ -30,7 +30,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "T_DP_ARTISTAS")
 public class DespesaArtistas {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
